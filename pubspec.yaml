@@ -38,6 +38,11 @@ dependencies:
   google_fonts: ^6.2.1
   http: ^1.2.2
   logger: ^1.0.0
+  shared_preferences: ^2.0.6
+  qr_code_scanner: ^0.6.1
+  permission_handler: ^10.2.0
+
+
 
 
 dev_dependencies :
