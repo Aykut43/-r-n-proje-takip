@@ -1,19 +1,30 @@
 class Kullanici {
-  String eposta;
-  String sifre;
+  final String eposta;
+  final String sifre;
+  final String kullaniciAdi;
 
-  Kullanici({required this.eposta, required this.sifre});
+  Kullanici(
+      {required this.eposta, required this.sifre, required this.kullaniciAdi});
 }
 
 class KullaniciYonetimi {
-  List<Kullanici> kullanicilar = [];
+  final List<Kullanici> _kullanicilar = [];
 
-  void kullaniciEkle(String eposta, String sifre) {
-    kullanicilar.add(Kullanici(eposta: eposta, sifre: sifre));
+  void kullaniciEkle(Kullanici kullanici) {
+    _kullanicilar.add(kullanici);
+  }
+
+  String? kullaniciAdiAl(String eposta) {
+    for (var kullanici in _kullanicilar) {
+      if (kullanici.eposta == eposta) {
+        return kullanici.kullaniciAdi;
+      }
+    }
+    return null;
   }
 
   bool girisYap(String eposta, String sifre) {
-    for (var kullanici in kullanicilar) {
+    for (var kullanici in _kullanicilar) {
       if (kullanici.eposta == eposta && kullanici.sifre == sifre) {
         return true;
       }

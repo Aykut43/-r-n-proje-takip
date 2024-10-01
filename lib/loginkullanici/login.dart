@@ -1,11 +1,13 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:takip_sistemi/sabitler/tema.dart';
-import 'package:logger/logger.dart';
+import 'package:yeni_projem/sabitler/tema.dart';
+import 'package:yeni_projem/loginkullanici/kullanicilar.dart';
+import 'package:yeni_projem/pages/profiles_page.dart'; // ProfilePage sınıfını içe aktardık
 
 class GirisSayfasi extends StatefulWidget {
-  const GirisSayfasi({super.key});
+  final KullaniciYonetimi kullaniciYonetimi;
+
+  const GirisSayfasi({super.key, required this.kullaniciYonetimi});
 
   @override
   State<GirisSayfasi> createState() => _GirisSayfasiState();
@@ -14,11 +16,48 @@ class GirisSayfasi extends StatefulWidget {
 class _GirisSayfasiState extends State<GirisSayfasi> {
   Tema tema = Tema();
   bool sifreGozukme = false;
-  final logger = Logger();
+  bool beniHatirla = false; // Beni Hatırla checkbox'ı için değişken
+  final TextEditingController epostaController = TextEditingController();
+  final TextEditingController sifreController = TextEditingController();
+  String? _hataMesaji;
+
+  void _girisYap() {
+    String eposta = epostaController.text;
+    String sifre = sifreController.text;
+
+    if (widget.kullaniciYonetimi.girisYap(eposta, sifre)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Giriş başarılı!')),
+      );
+      // Kullanıcı giriş yaptıktan sonra Profil sayfasına yönlendirme
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => ProfilePage(
+            kullaniciYonetimi: widget.kullaniciYonetimi,
+            eposta: eposta,
+          ),
+        ),
+      );
+    } else {
+      setState(() {
+        _hataMesaji = 'Geçersiz e-posta veya şifre';
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Giriş başarısız!')),
+      );
+    }
+  }
+
+  void _parolaUnuttum() {
+    // Parola sıfırlama işlemleri burada yapılabilir
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Parola sıfırlama bağlantısı gönderildi!')),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    logger.d('Şifre Gözüktü mü: $sifreGozukme');
     return SafeArea(
       child: Scaffold(
         body: Container(
@@ -73,6 +112,7 @@ class _GirisSayfasiState extends State<GirisSayfasi> {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
                   child: TextFormField(
+                    controller: epostaController,
                     decoration: tema.inputDec(
                       "E-Posta Adresinizi Girin...",
                       Icons.people_alt_outlined,
@@ -90,6 +130,7 @@ class _GirisSayfasiState extends State<GirisSayfasi> {
                     children: [
                       Expanded(
                         child: TextFormField(
+                          controller: sifreController,
                           obscureText: sifreGozukme,
                           decoration: tema.inputDec(
                             "Şifrenizi Girin...",
@@ -116,18 +157,24 @@ class _GirisSayfasiState extends State<GirisSayfasi> {
                     ],
                   ),
                 ),
+                Row(
+                  children: [
+                    Checkbox(
+                      value: beniHatirla,
+                      onChanged: (bool? value) {
+                        setState(() {
+                          beniHatirla = value ?? false;
+                        });
+                      },
+                    ),
+                    Text(
+                      'Beni Hatırla',
+                      style: GoogleFonts.quicksand(color: Colors.white),
+                    ),
+                  ],
+                ),
                 InkWell(
-                  onTap: () {
-                    if (kDebugMode) {
-                      logger.d("TIKLANDI");
-                    }
-                    // Kullanıcı giriş yaptıktan sonra AnaSayfa'ya yönlendirme
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const GirisSayfasi()),
-                    );
-                  },
+                  onTap: _girisYap,
                   child: Container(
                       width: MediaQuery.of(context).size.width / 1.5,
                       height: 50,
@@ -154,6 +201,20 @@ class _GirisSayfasiState extends State<GirisSayfasi> {
                         ),
                       )),
                 ),
+                TextButton(
+                  onPressed: _parolaUnuttum,
+                  child: Text(
+                    'Parolanızı mı unuttunuz?',
+                    style: GoogleFonts.quicksand(color: Colors.white),
+                  ),
+                ),
+                if (_hataMesaji != null)
+                  Center(
+                    child: Text(
+                      _hataMesaji!,
+                      style: const TextStyle(color: Colors.red),
+                    ),
+                  ),
               ],
             ),
           ),
