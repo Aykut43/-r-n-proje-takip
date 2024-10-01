@@ -1,31 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:yeni_projem/siparisyonetimi/siparis_yonetimi.dart';
 
 class SiparislerPage extends StatelessWidget {
-  const SiparislerPage({super.key});
+  final SiparisYonetimi siparisYonetimi;
+
+  const SiparislerPage({super.key, required this.siparisYonetimi});
 
   @override
   Widget build(BuildContext context) {
-    // Örnek sipariş verileri
-    final List<Map<String, String>> siparisler = [
-      {
-        'urun': 'Kalem',
-        'miktar': '10',
-        'adres': 'İstanbul',
-        'odeme': 'Kredi Kartı'
-      },
-      {
-        'urun': 'Defter',
-        'miktar': '5',
-        'adres': 'Ankara',
-        'odeme': 'Banka Havalesi'
-      },
-      {
-        'urun': 'Silgi',
-        'miktar': '20',
-        'adres': 'İzmir',
-        'odeme': 'Kapıda Ödeme'
-      },
-    ];
+    final siparisler = siparisYonetimi.getSiparisler();
 
     return Scaffold(
       appBar: AppBar(
@@ -36,15 +19,16 @@ class SiparislerPage extends StatelessWidget {
         child: ListView.builder(
           itemCount: siparisler.length,
           itemBuilder: (context, index) {
+            final siparis = siparisler[index];
             return Card(
               elevation: 4.0,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8.0),
               ),
               child: ListTile(
-                title: Text(siparisler[index]['urun']!),
+                title: Text(siparis.urun),
                 subtitle: Text(
-                    'Miktar: ${siparisler[index]['miktar']}\nAdres: ${siparisler[index]['adres']}\nÖdeme Yöntemi: ${siparisler[index]['odeme']}'),
+                    'Miktar: ${siparis.miktar}\nAdres: ${siparis.adres}\nÖdeme Yöntemi: ${siparis.odeme}'),
               ),
             );
           },

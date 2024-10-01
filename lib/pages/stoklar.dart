@@ -8,6 +8,7 @@ class StoklarPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Stoklar'),
+        backgroundColor: Colors.teal,
       ),
       body: const Center(
         child: Text('Stoklar Sayfası İçeriği'),

@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:yeni_projem/loginkullanici/musteriler.dart';
+import 'package:yeni_projem/SiparisYonetimi/siparis_yonetimi.dart'; // Dosya adını güncelledik
 import 'package:yeni_projem/pages/stoklar.dart'; // Stoklar sayfasını içe aktardık
 import 'package:yeni_projem/pages/urunlerim.dart'; // Ürünlerim sayfasını içe aktardık
 import 'package:yeni_projem/pages/siparis_olustur.dart'; // Sipariş Oluştur sayfasını içe aktardık
 import 'package:yeni_projem/pages/siparisler.dart'; // Siparişler sayfasını içe aktardık
 import 'package:yeni_projem/pages/musteri_kaydi.dart'; // Müşteri Kaydı sayfasını içe aktardık
+import 'package:yeni_projem/pages/musteri_listesi.dart'; // Müşteri Listesi sayfasını içe aktardık
 
 class HomePage extends StatelessWidget {
   final MusteriYonetimi musteriYonetimi;
+  final SiparisYonetimi siparisYonetimi =
+      SiparisYonetimi(); // SiparisYonetimi nesnesini oluşturduk
 
-  const HomePage({super.key, required this.musteriYonetimi});
+  HomePage({super.key, required this.musteriYonetimi});
 
   @override
   Widget build(BuildContext context) {
@@ -101,7 +105,7 @@ class HomePage extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                             builder: (context) => SiparisOlusturPage(
-                                musteriYonetimi: musteriYonetimi)),
+                                siparisYonetimi: siparisYonetimi)),
                       );
                     },
                   ),
@@ -141,7 +145,8 @@ class HomePage extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const SiparislerPage()),
+                            builder: (context) => SiparislerPage(
+                                siparisYonetimi: siparisYonetimi)),
                       );
                     },
                   ),
@@ -151,7 +156,12 @@ class HomePage extends StatelessWidget {
                     Icons.people_alt,
                     Colors.teal,
                     onTap: () {
-                      _showCustomerListDialog(context);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => MusteriListesiPage(
+                                musteriYonetimi: musteriYonetimi)),
+                      );
                     },
                   ),
                 ],
@@ -191,37 +201,6 @@ class HomePage extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
-
-  void _showCustomerListDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Müşteri Listesi'),
-          content: SizedBox(
-            width: double.maxFinite,
-            child: ListView.builder(
-              shrinkWrap: true,
-              itemCount: musteriYonetimi.getMusteriler().length,
-              itemBuilder: (context, index) {
-                return ListTile(
-                  title: Text(musteriYonetimi.getMusteriler()[index].ad),
-                );
-              },
-            ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text('Kapat'),
-            ),
-          ],
-        );
-      },
     );
   }
 }

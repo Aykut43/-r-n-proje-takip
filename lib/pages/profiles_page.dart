@@ -71,6 +71,7 @@ class ProfilePage extends StatelessWidget {
             ],
           ),
         ],
+        backgroundColor: Colors.teal,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),

@@ -72,6 +72,7 @@ class MusteriKaydiPageState extends State<MusteriKaydiPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Müşteri Kaydı'),
+        backgroundColor: Colors.teal,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),

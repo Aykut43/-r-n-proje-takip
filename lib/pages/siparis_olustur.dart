@@ -83,6 +83,7 @@ class SiparisOlusturPageState extends State<SiparisOlusturPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Sipariş Oluştur'),
+        backgroundColor: Colors.teal,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
