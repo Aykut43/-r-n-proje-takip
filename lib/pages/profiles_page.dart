@@ -81,8 +81,10 @@ class ProfilePage extends StatelessWidget {
             const Center(
               child: CircleAvatar(
                 radius: 50,
-                //backgroundImage:
-                //AssetImage('assets/profile_picture.png'), // Profil resmi
+                child: Icon(
+                  Icons.person,
+                  size: 50,
+                ),
               ),
             ),
             const SizedBox(height: 20),

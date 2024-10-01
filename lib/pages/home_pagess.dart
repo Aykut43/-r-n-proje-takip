@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:yeni_projem/loginkullanici/musteriler.dart';
-import 'package:yeni_projem/SiparisYonetimi/siparis_yonetimi.dart'; // Dosya adını güncelledik
+import 'package:yeni_projem/pages/siparis_olustur_page.dart'; // Dosya adını güncelledik
 import 'package:yeni_projem/pages/stoklar.dart'; // Stoklar sayfasını içe aktardık
 import 'package:yeni_projem/pages/urunlerim.dart'; // Ürünlerim sayfasını içe aktardık
-import 'package:yeni_projem/pages/siparis_olustur.dart'; // Sipariş Oluştur sayfasını içe aktardık
 import 'package:yeni_projem/pages/siparisler.dart'; // Siparişler sayfasını içe aktardık
 import 'package:yeni_projem/pages/musteri_kaydi.dart'; // Müşteri Kaydı sayfasını içe aktardık
 import 'package:yeni_projem/pages/musteri_listesi.dart'; // Müşteri Listesi sayfasını içe aktardık
+import 'package:yeni_projem/siparis_yontemi/siparis_yontemi.dart';
 
 class HomePage extends StatelessWidget {
   final MusteriYonetimi musteriYonetimi;
@@ -20,23 +20,23 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          'AFS Müşteri Takip',
-          style: GoogleFonts.quicksand(
-            color: Colors.black, // Başlık yazısı siyah
-            fontSize: 24,
+          title: Text(
+            'AFS Müşteri Takip',
+            style: GoogleFonts.quicksand(
+              color: Colors.black, // Başlık yazısı siyah
+              fontSize: 24,
+            ),
           ),
-        ),
-        automaticallyImplyLeading: false, // Geri butonunu kaldırmak için
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.notifications),
-            onPressed: () {
-              // Bildirimler için işlem
-            },
-          ),
-        ],
-      ),
+          automaticallyImplyLeading: false, // Geri butonunu kaldırmak için
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.notifications),
+              onPressed: () {
+                // Bildirimler için işlem
+              },
+            ),
+          ],
+          backgroundColor: Colors.teal),
       body: Container(
         color: Colors.white, // Arka plan rengi beyaz
         child: SingleChildScrollView(
@@ -105,6 +105,7 @@ class HomePage extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                             builder: (context) => SiparisOlusturPage(
+                                musteriYonetimi: musteriYonetimi,
                                 siparisYonetimi: siparisYonetimi)),
                       );
                     },

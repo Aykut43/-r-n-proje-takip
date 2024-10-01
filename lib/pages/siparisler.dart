@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:yeni_projem/siparisyonetimi/siparis_yonetimi.dart';
+import 'package:yeni_projem/siparis_yontemi/siparis_yontemi.dart';
 
 class SiparislerPage extends StatelessWidget {
   final SiparisYonetimi siparisYonetimi;
@@ -13,6 +13,7 @@ class SiparislerPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Siparişler'),
+        backgroundColor: Colors.teal,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),

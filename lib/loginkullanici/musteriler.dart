@@ -21,11 +21,15 @@ class Musteri {
 class MusteriYonetimi {
   final List<Musteri> _musteriler = [];
 
+  List<Musteri> getMusteriler() {
+    return _musteriler;
+  }
+
   void musteriEkle(Musteri musteri) {
     _musteriler.add(musteri);
   }
 
-  List<Musteri> getMusteriler() {
-    return _musteriler;
+  void musteriSil(Musteri musteri) {
+    _musteriler.remove(musteri);
   }
 }
