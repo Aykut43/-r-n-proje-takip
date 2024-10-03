@@ -8,11 +8,33 @@ class LogoutPage extends StatelessWidget {
   const LogoutPage({super.key, required this.kullaniciYonetimi});
 
   void _logout(BuildContext context) {
-    Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(
-          builder: (context) =>
-              GirisSayfasi(kullaniciYonetimi: kullaniciYonetimi)),
-      (Route<dynamic> route) => false,
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Oturumu Kapat'),
+          content: const Text('Oturumu kapatmak istediğinize emin misiniz?'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('İptal'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          GirisSayfasi(kullaniciYonetimi: kullaniciYonetimi)),
+                  (Route<dynamic> route) => false,
+                );
+              },
+              child: const Text('Evet'),
+            ),
+          ],
+        );
+      },
     );
   }
 

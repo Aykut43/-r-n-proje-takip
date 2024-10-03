@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:yeni_projem/loginkullanici/musteriler.dart';
 import 'package:yeni_projem/pages/urunlerim.dart'; // Urunlerim dosyasını içe aktardık
 import 'package:yeni_projem/siparis_yontemi/siparis_yontemi.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SiparisOlusturPage extends StatefulWidget {
   final MusteriYonetimi musteriYonetimi;
@@ -47,6 +48,7 @@ class SiparisOlusturPageState extends State<SiparisOlusturPage> {
                 (int.parse(urun['adet']) - int.parse(miktar)).toString();
           }
         }
+        _saveUrunler();
       });
 
       showDialog(
@@ -88,6 +90,14 @@ class SiparisOlusturPageState extends State<SiparisOlusturPage> {
         },
       );
     }
+  }
+
+  void _saveUrunler() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String> urunlerString = urunler.map((urun) {
+      return urun.entries.map((e) => '${e.key}:${e.value}').join(',');
+    }).toList();
+    prefs.setStringList('urunler', urunlerString);
   }
 
   @override

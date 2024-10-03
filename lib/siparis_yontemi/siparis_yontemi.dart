@@ -10,6 +10,24 @@ class Siparis {
     required this.adres,
     required this.odeme,
   });
+
+  Map<String, dynamic> toJson() {
+    return {
+      'urun': urun,
+      'miktar': miktar,
+      'adres': adres,
+      'odeme': odeme,
+    };
+  }
+
+  factory Siparis.fromJson(Map<String, dynamic> json) {
+    return Siparis(
+      urun: json['urun'],
+      miktar: json['miktar'],
+      adres: json['adres'],
+      odeme: json['odeme'],
+    );
+  }
 }
 
 class SiparisYonetimi {
@@ -21,5 +39,9 @@ class SiparisYonetimi {
 
   List<Siparis> getSiparisler() {
     return _siparisler;
+  }
+
+  void siparisSil(int index) {
+    _siparisler.removeAt(index);
   }
 }

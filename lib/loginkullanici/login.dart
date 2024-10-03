@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:yeni_projem/sabitler/tema.dart';
 import 'package:yeni_projem/loginkullanici/kullanicilar.dart';
-import 'package:yeni_projem/pages/profiles_page.dart'; // ProfilePage sınıfını içe aktardık
+import 'package:yeni_projem/pages/profiles_page.dart';
+import 'package:yeni_projem/loginkullanici/register_page.dart';
 
 class GirisSayfasi extends StatefulWidget {
   final KullaniciYonetimi kullaniciYonetimi;
@@ -21,6 +23,28 @@ class _GirisSayfasiState extends State<GirisSayfasi> {
   final TextEditingController sifreController = TextEditingController();
   String? _hataMesaji;
 
+  @override
+  void initState() {
+    super.initState();
+    _loadPreferences();
+  }
+
+  Future<void> _loadPreferences() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      epostaController.text = prefs.getString('eposta') ?? '';
+      sifreController.text = prefs.getString('sifre') ?? '';
+      beniHatirla = prefs.getBool('beniHatirla') ?? false;
+    });
+  }
+
+  Future<void> _savePreferences() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('eposta', epostaController.text);
+    await prefs.setString('sifre', sifreController.text);
+    await prefs.setBool('beniHatirla', beniHatirla);
+  }
+
   void _girisYap() {
     String eposta = epostaController.text;
     String sifre = sifreController.text;
@@ -29,6 +53,9 @@ class _GirisSayfasiState extends State<GirisSayfasi> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Giriş başarılı!')),
       );
+      if (beniHatirla) {
+        _savePreferences();
+      }
       // Kullanıcı giriş yaptıktan sonra Profil sayfasına yönlendirme
       Navigator.pushReplacement(
         context,
@@ -53,6 +80,17 @@ class _GirisSayfasiState extends State<GirisSayfasi> {
     // Parola sıfırlama işlemleri burada yapılabilir
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text('Parola sıfırlama bağlantısı gönderildi!')),
+    );
+  }
+
+  void _uyeOl() {
+    // Üye Ol butonuna tıklanınca RegisterPage sayfasına yönlendirme
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) =>
+            RegisterPage(kullaniciYonetimi: widget.kullaniciYonetimi),
+      ),
     );
   }
 
@@ -205,6 +243,13 @@ class _GirisSayfasiState extends State<GirisSayfasi> {
                   onPressed: _parolaUnuttum,
                   child: Text(
                     'Parolanızı mı unuttunuz?',
+                    style: GoogleFonts.quicksand(color: Colors.white),
+                  ),
+                ),
+                TextButton(
+                  onPressed: _uyeOl,
+                  child: Text(
+                    'Üye Ol',
                     style: GoogleFonts.quicksand(color: Colors.white),
                   ),
                 ),

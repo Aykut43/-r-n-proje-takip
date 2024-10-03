@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'urunlerim.dart'; // UrunlerimPage sayfasını içe aktar
+import 'package:yeni_projem/loginkullanici/musteriler.dart'; // MusteriYonetimi sınıfını içe aktar
 
 class SearchPage extends StatefulWidget {
-  const SearchPage({super.key});
+  final String query; // query parametresini ekledik
+
+  const SearchPage(
+      {super.key, required this.query}); // query parametresini ekledik
 
   @override
   SearchPageState createState() => SearchPageState();
@@ -10,11 +14,25 @@ class SearchPage extends StatefulWidget {
 
 class SearchPageState extends State<SearchPage> {
   String _searchQuery = '';
+  final MusteriYonetimi musteriYonetimi =
+      MusteriYonetimi(); // MusteriYonetimi nesnesini oluşturduk
+
+  @override
+  void initState() {
+    super.initState();
+    _searchQuery = widget.query; // query parametresini _searchQuery'ye atadık
+  }
 
   @override
   Widget build(BuildContext context) {
     final filteredProducts = UrunlerimPage.urunler.where((urun) {
       return urun['isim']!.toLowerCase().contains(_searchQuery.toLowerCase());
+    }).toList();
+
+    final filteredCustomers = musteriYonetimi.getMusteriler().where((musteri) {
+      return musteri.ad.toLowerCase().contains(_searchQuery.toLowerCase()) ||
+          musteri.soyad.toLowerCase().contains(_searchQuery.toLowerCase()) ||
+          musteri.sirketAdi.toLowerCase().contains(_searchQuery.toLowerCase());
     }).toList();
 
     return Scaffold(
@@ -54,7 +72,10 @@ class SearchPageState extends State<SearchPage> {
                       title: const Text('Müşteri Arama Sonuçları'),
                       subtitle: Text('Aranan: $_searchQuery'),
                     ),
-                    // Müşteri arama sonuçlarını burada listeleyebilirsin
+                    ...filteredCustomers.map((musteri) => ListTile(
+                          title: Text('${musteri.ad} ${musteri.soyad}'),
+                          subtitle: Text(musteri.sirketAdi),
+                        )),
                   ] else ...[
                     const Center(
                       child: Text('Arama yapmak için bir şeyler yazın'),

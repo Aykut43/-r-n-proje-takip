@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:yeni_projem/loginkullanici/musteriler.dart';
 
 class MusteriKaydiPage extends StatefulWidget {
@@ -18,6 +19,42 @@ class MusteriKaydiPageState extends State<MusteriKaydiPage> {
   final TextEditingController _adresController = TextEditingController();
   final TextEditingController _telefonController = TextEditingController();
   final TextEditingController _sirketAdiController = TextEditingController();
+  final TextEditingController _epostaController = TextEditingController();
+  final TextEditingController _dogumTarihiController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _loadPreferences();
+  }
+
+  Future<void> _loadPreferences() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _tcknController.text = prefs.getString('tckn') ?? '';
+      _adController.text = prefs.getString('ad') ?? '';
+      _soyadController.text = prefs.getString('soyad') ?? '';
+      _vnController.text = prefs.getString('vn') ?? '';
+      _adresController.text = prefs.getString('adres') ?? '';
+      _telefonController.text = prefs.getString('telefon') ?? '';
+      _sirketAdiController.text = prefs.getString('sirketAdi') ?? '';
+      _epostaController.text = prefs.getString('eposta') ?? '';
+      _dogumTarihiController.text = prefs.getString('dogumTarihi') ?? '';
+    });
+  }
+
+  Future<void> _savePreferences() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('tckn', _tcknController.text);
+    await prefs.setString('ad', _adController.text);
+    await prefs.setString('soyad', _soyadController.text);
+    await prefs.setString('vn', _vnController.text);
+    await prefs.setString('adres', _adresController.text);
+    await prefs.setString('telefon', _telefonController.text);
+    await prefs.setString('sirketAdi', _sirketAdiController.text);
+    await prefs.setString('eposta', _epostaController.text);
+    await prefs.setString('dogumTarihi', _dogumTarihiController.text);
+  }
 
   void _musteriKaydet() {
     String tckn = _tcknController.text;
@@ -27,6 +64,8 @@ class MusteriKaydiPageState extends State<MusteriKaydiPage> {
     String adres = _adresController.text;
     String telefon = _telefonController.text;
     String sirketAdi = _sirketAdiController.text;
+    String eposta = _epostaController.text;
+    String dogumTarihi = _dogumTarihiController.text;
 
     bool isPersonalInfoValid = ad.isNotEmpty && soyad.isNotEmpty;
     bool isCompanyInfoValid = sirketAdi.isNotEmpty;
@@ -42,7 +81,10 @@ class MusteriKaydiPageState extends State<MusteriKaydiPage> {
           vn: vn,
           adres: adres,
           telefon: telefon,
-          sirketAdi: sirketAdi));
+          sirketAdi: sirketAdi,
+          eposta: eposta,
+          dogumTarihi: dogumTarihi));
+      _savePreferences();
       Navigator.of(context).pop();
     } else {
       // Hata mesajı göster
@@ -106,6 +148,14 @@ class MusteriKaydiPageState extends State<MusteriKaydiPage> {
             TextField(
               controller: _sirketAdiController,
               decoration: const InputDecoration(labelText: 'Şirket Adı'),
+            ),
+            TextField(
+              controller: _epostaController,
+              decoration: const InputDecoration(labelText: 'E-posta'),
+            ),
+            TextField(
+              controller: _dogumTarihiController,
+              decoration: const InputDecoration(labelText: 'Doğum Tarihi'),
             ),
             const SizedBox(height: 20),
             Center(
